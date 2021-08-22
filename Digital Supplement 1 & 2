@@ -1,0 +1,116 @@
+Supplement 1: MI-CLAIM Criteria
+
+ 
+
+Study Design
+Clinical problem: Fascial dehiscence following exploratory laparotomy is a potentially catastrophic complication. An accurate model that incorporates patient demographics and surgical information may help surgeons predict which patients are at high risk for fascial dehiscence following this surgery.  An accurate model would augment clinicians’ ability to determine when it is appropriate to provide invasive interventions to prevent this feared complication.
+
+Research question: Can machine learning models be developed to generate highly discriminative and calibrated predictions for which patients will develop fascial dehiscence following exploratory laparotomy?
+
+Cohorts:2011-2018 NSQIP data. Patients undergoing Exploratory Laparotomy were identified by CPT 49000 (104,023 patients). We excluded any case that was missing a predictor variable. 2011-2016 data were used for training (69,969 patients) and 2017-2018 data were used for testing (23,055 patients).
+
+State of the art baseline: Two models: Webster, C. et al.[6], (see manuscript for details): area under the receiver operating characteristic curve (ROC AUC) of 0.84 (metric generated on training data, patients dated as far back as 1996, and predictors included post-operative risk factors which prevents reliable use for guiding intraoperative decisions). van Ramhorst, G, et al.[7]: C-statistic of 0.91 (model developed with patients dating as far back as 1985, ROC AUC metric generated on validation data but validation cohort extremely small with only 19 cases of wound dehiscence, and predictors included post-operative risk factors which prevents reliable use for guiding intraoperative decisions).
+
+
+Data and optimization
+Data Origin: NSQIP participant use data files 2011-2018.
+
+Data Transformations: Excluded all patients with missing data (no imputation). Age was truncated above 90. Body Mass Index (BMI) was calculated and truncated outside the range 15-70 kg/m2. Operative time was truncated below 30 minutes and above 300 minutes. Laboratory values were truncated outside the following ranges: sodium (125-150), white blood cells (2, 20), hematocrit (21, 50), platelets (50, 500), creatinine (0.5, 4). For diabetes, the categories ‘oral medication’ and ‘insulin-dependent’ were grouped together. Superficial and deep incisional infection, wound infection, and deep organ space surgical site infection were aggregated into the binary categorical variable ‘aggregate infection’. Categorical variables were integer encoded (e.g., ASA PS 1: 1, ASA PS 2: 2, or for hypertension, 0: No, 1: Yes).
+
+Independence of train and test data: Training and test data were temporally separated, test data not presented to training algorithms. More details available in source code.
+
+Model Development: XGBoost used. Hyperparameters optimized using Bayesian optimization with 5-fold cross validation, log-loss loss function. Further details available in code.
+
+Data Structure: Structured, tabular
+
+Model Performance
+Evaluation metric for model performance: AUC ROC to assess discrimination, calibration plot to assess calibration, brier score and null model brier score to summarize discrimination and calibration.
+
+Evaluation metrics for clinical utility: Decision curve analysis was generated and reported in graphical and descriptive formats.
+
+Performance comparison with baseline: Since baseline models used post-operative predictors, we cannot make direct comparisons to our data as we only considered predictors present during the time of surgery. Our model demonstrates ROC AUC .69 [ .67,.72] on temporally separated test data.
+
+Model Examination
+Examination technique 1: Shapley Additive Explanations (SHAP) summary plot demonstrating feature impact on model performance as a function of feature value.
+
+Examination technique 2: Sensitivity AnalysisSensitivity analysis using SHAP force plots; two most confident and correct and two least confident and correct were reported.
+
+Examination technique 3: SHAP dependency plots for all predictor features.
+
+Examination technique 4: Comparison of our model’s most important features and performance metrics to those found in previous studies.
+
+Discussion: See manuscript
+
+Reproducibility
+Tier 1: Code for model selection and performance evaluation shared on GitHub (https://github.com/gb563/Fascial_Dehiscence). Model also can be evaluated on novel test data on the case level at (http://nb-group.org/dehisc/). Web-based application generates predictions (probability of wound dehiscence following exploratory laparotomy) and force plots showing how the model arrived at its prediction.
+
+ 
+
+Supplement 2: Model Features
+
+
+
+The following features from the American College of Surgeons National Surgical Quality Improvement Program (NSQIP) were evaluated (formal definitions are available on the NSQIP website <https://www.facs.org/Quality-Programs/ACS-NSQIP/participant-use>):
+
+ 
+
+
+Age
+
+Sex
+
+Functional status
+
+American Society of Anesthesiologists Physical Class
+
+Steroid use
+
+Ascites
+
+Sepsis/septic shock
+
+Ventilator dependent
+
+Disseminated cancer
+
+Diabetes
+
+Hypertension
+
+Congestive heart failure
+
+Dyspnea
+
+Smoker
+
+Chronic Obstructive Pulmonary Disease
+
+Dialysis
+
+Renal failure
+
+Height and Weight (process to body mass index)
+
+Emergency surgery
+
+Preoperative Sodium level
+
+Preoperative White Blood Cell count
+
+Preoperative Hematocrit
+
+Preoperative Platelet count
+
+Preoperative Creatinine
+
+Pneumonia
+
+Transfusion
+
+Wound Classification
+
+Operative Time
+
+Infection: Superficial Incisional, Deep Incisional, Organ Space, Wound Infection
+
+ 
