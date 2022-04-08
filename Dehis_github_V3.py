@@ -322,6 +322,7 @@ def process_lap_data(cpt_code,Train=True):
 #now for the fun part
 #feel free to adjust the hyperparameters within the function
 #this will return optimal hyperparameters after bayesian optimization
+#This optimization section is modified from some code originally appearing here: https://ayguno.github.io/curious/portfolio/bayesian_optimization.html
 def optimized_data(rand_points,search_number,inputs_NSQIP,targets_train):
 
     def xgboost_bayesian(max_depth,learning_rate,colsample_bytree, min_child_weight,reg_alpha,gamma):
